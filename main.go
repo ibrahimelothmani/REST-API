@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ibrahimelothmani/API/internal/app"
+	"github.com/ibrahimelothmani/API/internal/routes"
 	"net/http"
 	"time"
 )
@@ -18,10 +19,11 @@ func main() {
 		panic(err)
 	}
 
-	http.HandleFunc("/health", HealthCheck)
+	r := routes.SetupRoutes(application)
 
 	server := http.Server{
 		Addr:              fmt.Sprintf(":%d", port),
+		Handler:           r,
 		IdleTimeout:       time.Minute,
 		ReadHeaderTimeout: 10 * time.Second,
 		WriteTimeout:      30 * time.Second,
@@ -34,8 +36,4 @@ func main() {
 	if err != nil {
 		application.Logger.Fatal("Error starting server:", err)
 	}
-}
-
-func HealthCheck(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
 }

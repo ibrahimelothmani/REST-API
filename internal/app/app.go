@@ -2,6 +2,7 @@ package app
 
 import (
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -15,4 +16,7 @@ func NewApplication() (*Application, error) {
 		Logger: logger,
 	}
 	return app, nil
+}
+func (a *Application) HealthCheck(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
